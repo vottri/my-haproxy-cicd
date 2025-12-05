@@ -12,10 +12,9 @@ pipeline {
                     sudo cp ${WORKSPACE}/configs/haproxy.cfg /etc/haproxy/haproxy.cfg
 
                     # 3. Check syntax
-                    sudo haproxy -c -f /etc/haproxy/haproxy.cfg > /tmp/haproxy-check.log 2>&1
-                    if ! grep -q "Configuration file is valid" /tmp/haproxy-check.log; then
+                    if ! sudo haproxy -c -f /etc/haproxy/haproxy.cfg 2>&1 | grep -q "Configuration file is valid"; then
                         echo "Config loi syntax!"
-                        cat /tmp/haproxy-check.log
+                        sudo haproxy -c -f /etc/haproxy/haproxy.cfg 2>&1 || true
                         exit 1
                     fi
 
